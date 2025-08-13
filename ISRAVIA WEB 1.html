@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I-SRAVIA - Break the Wall of Silence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0B1020;
+            --surface: linear-gradient(180deg,#081126 0%, #0b1230 100%);
+            --glass: rgba(255,255,255,0.04);
+            --accent-cyan: #00E5FF;
+            --accent-magenta: #9B7BFF;
+            --muted: #9AA7C7;
+            --success: #7DE58A;
+            --danger: #FF7A7A;
+            --card-bg: rgba(255,255,255,0.03);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: white;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav.scrolled {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-cyan);
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-magenta));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.3);
+            animation: glow 1s ease-in-out infinite alternate;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(9,12,30,1) 0%, rgba(18,8,50,1) 60%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+            padding: 0 2rem;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .hero .break {
+            background: linear-gradient(45deg, var(--accent-cyan), white);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .silence {
+            background: linear-gradient(45deg, var(--accent-magenta), white);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--muted);
+            margin-bottom: 3rem;
+            font-weight: 500;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-primary {
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-magenta));
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .cta-secondary {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Stats Strip */
+        .stats {
+            background: var(--card-bg);
+            padding: 3rem 2rem;
+            margin-top: -50px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards;
+        }
+
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-number.animate {
+            animation: countUp 2s ease-out forwards;
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* How It Works */
+        .workflow {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin: 3rem 0;
+        }
+
+        .workflow-step {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .workflow-step:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 229, 255, 0.2);
+        }
+
+        .workflow-step::after {
+            content: '→';
+            position: absolute;
+            right: -1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: var(--accent-cyan);
+        }
+
+        .workflow-step:last-child::after {
+            display: none;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-magenta));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            animation: bounce-in 1s ease-out;
+        }
+
+        /* Features Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(155, 123, 255, 0.2);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-magenta));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            animation: pulse 3s infinite;
+        }
+
+        /* Team Grid */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+
+
+        .team-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: rotate-in 1s ease-out;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 229, 255, 0.2);
+        }
+
+        .team-photo {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-magenta));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .team-info {
+            padding: 1.5rem;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: white;
+            font-family: inherit;
+        }
+
+        .form-group select option {
+            background: var(--bg);
+            color: white;
+            padding: 0.5rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.1);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--card-bg);
+            padding: 3rem 2rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .footer-section a {
+            color: var(--muted);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent-cyan);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-ctas {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .workflow-step::after {
+                display: none;
+            }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Enhanced Animations */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .bounce-in {
+            animation: bounceIn 1s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            0% { transform: translateX(-100px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        @keyframes slideInRight {
+            0% { transform: translateX(100px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(0, 229, 255, 0.3); }
+            to { box-shadow: 0 0 30px rgba(155, 123, 255, 0.5); }
+        }
+
+        .rotate-in {
+            animation: rotateIn 1s ease-out;
+        }
+
+        @keyframes rotateIn {
+            0% { transform: rotate(-180deg) scale(0); opacity: 0; }
+            100% { transform: rotate(0deg) scale(1); opacity: 1; }
+        }
+
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid var(--accent-cyan);
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--accent-cyan); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav" id="navbar">
+        <div class="nav-container">
+            <div class="logo">I-SRAVIA</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#impact">Impact</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="#get-involved" class="cta-button">Get Involved</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="particles" id="particles"></div>
+        <div class="hero-content">
+            <h1><span class="break">Break</span> the Wall of <span class="silence">Silence</span></h1>
+            <p class="hero-subtitle">I-SRAVIA — Indian Sign-Language Responsive & Voice Intelligent Assistant</p>
+            <div class="hero-ctas">
+                <button class="cta-button cta-primary" onclick="openDemo()">Watch Demo</button>
+                <a href="#how-it-works" class="cta-secondary">How It Works</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Strip -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number">63M</div>
+                <div class="stat-label">Deaf individuals in India</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">400M</div>
+                <div class="stat-label">Globally affected</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Special hardware required</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section" id="how-it-works">
+        <h2>How It Works</h2>
+        <div class="workflow">
+            <div class="workflow-step">
+                <div class="step-icon">📹</div>
+                <h3>Input</h3>
+                <p>Camera captures sign language gestures or microphone records speech</p>
+            </div>
+            <div class="workflow-step">
+                <div class="step-icon">🧠</div>
+                <h3>ML Pipeline</h3>
+                <p>Advanced AI processes gestures through segmentation, recognition, and NLP</p>
+            </div>
+            <div class="workflow-step">
+                <div class="step-icon">💬</div>
+                <h3>Output</h3>
+                <p>Real-time text, voice synthesis, or exportable transcripts</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Impact -->
+    <section class="section" id="impact">
+        <h2>Our Impact</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 3rem 0;">
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Awards & Recognition</h3>
+                <p>DST INSPIRE National Awards recipient and STPI EMtek winner, recognized for innovation in accessibility technology</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎓</div>
+                <h3>Educational Partnerships</h3>
+                <p>Collaborating with Harsha Memorial School for the Deaf and Mute in Jatni and other institutions across India</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h3>Research Impact</h3>
+                <p>Contributing to open-source datasets and research papers</p>
+            </div>
+        </div>
+        
+        <div style="background: var(--card-bg); padding: 2rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); text-align: center;">
+            <h3 style="margin-bottom: 2rem;">Impact Calculator</h3>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                <label for="users">Number of users:</label>
+                <input type="number" id="users" value="100" min="1" style="width: 100px; padding: 0.5rem; background: var(--bg); border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; color: white;">
+                <span>=</span>
+                <span id="impact-result" style="font-size: 1.5rem; font-weight: bold; color: var(--accent-cyan);">800 hours</span>
+                <span>of communication enabled daily</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section" id="features">
+        <h2>Product Features</h2>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Real-time Recognition</h3>
+                <p>Instant sign language to text conversion with 95%+ accuracy</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎤</div>
+                <h3>Speech-to-Text</h3>
+                <p>Bidirectional communication with voice recognition capabilities</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Mobile Ready</h3>
+                <p>Works on any smartphone or tablet without special hardware</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Privacy First</h3>
+                <p>Local processing ensures your conversations stay private</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Scalable Models</h3>
+                <p>Continuously improving through community contributions</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👥</div>
+                <h3>Community Tools</h3>
+                <p>Built-in features for learning and teaching sign language</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Get Involved -->
+    <section class="section" id="get-involved">
+        <h2>Get Involved</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+            <div class="feature-card">
+                <h3>Pilot Program</h3>
+                <p>Join our beta testing program and help improve I-SRAVIA</p>
+                <form style="margin-top: 1rem;">
+                    <div class="form-group">
+                        <input type="text" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="form-group">
+                        <select required>
+                            <option value="">Select Role</option>
+                            <option value="educator">Educator</option>
+                            <option value="student">Student</option>
+                            <option value="parent">Parent</option>
+                            <option value="researcher">Researcher</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="cta-button" style="width: 100%;">Join Pilot</button>
+                </form>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Volunteer</h3>
+                <p>Contribute data, test features, or help with translations</p>
+                <div style="margin-top: 1rem;">
+                    <button class="cta-button" style="width: 100%; margin-bottom: 1rem;">Contribute Data</button>
+                    <button class="cta-secondary" style="width: 100%; display: block; text-align: center;">Schedule Call</button>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Partner With Us</h3>
+                <p>Schools, NGOs, and organizations - let's work together</p>
+                <form style="margin-top: 1rem;">
+                    <div class="form-group">
+                        <input type="text" placeholder="Organization Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Contact Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Tell us about your organization" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="cta-button" style="width: 100%;">Start Partnership</button>
+                </form>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <div class="feature-card" style="display: inline-block; max-width: 400px;">
+                <h3>Support Our Mission</h3>
+                <p>Help us break down communication barriers for millions</p>
+                <button class="cta-button" style="width: 100%; margin-top: 1rem; font-size: 1.1rem;">Donate Now</button>
+                <p style="font-size: 0.9rem; color: var(--muted); margin-top: 1rem;">Your contribution directly funds research and development</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team -->
+    <section class="section" id="team">
+        <h2>Our Team</h2>
+        <div style="display: flex; justify-content: center; margin: 3rem 0;">
+            <div class="team-card" style="max-width: 400px; width: 100%;">
+                <img src="https://i.ibb.co/Q3d6nhR/your-photo.jpg" alt="Shraavya Mishra" style="width: 100%; height: 200px; object-fit: cover;">
+                <div class="team-info">
+                    <h3>Shraavya Mishra</h3>
+                    <p style="color: var(--accent-cyan); margin-bottom: 0.5rem;">Founder & Lead Developer</p>
+                    <p style="color: var(--muted); font-size: 0.9rem;">Passionate technologist dedicated to breaking communication barriers through innovative AI solutions</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <h3 style="margin-bottom: 1rem;">Our Mentors</h3>
+            <p style="color: var(--muted); margin-bottom: 2rem;">Guided by industry experts and accessibility champions</p>
+            <button class="cta-secondary">Meet Our Advisory Board</button>
+        </div>
+    </section>
+
+    <!-- Resources -->
+    <section class="section" id="resources">
+        <h2>Resources</h2>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">📄</div>
+                <h3>Research Papers</h3>
+                <p>Published research on sign language recognition and accessibility</p>
+                <button class="cta-secondary" style="margin-top: 1rem; width: 100%;">View Papers</button>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Open Datasets</h3>
+                <p>Community-contributed sign language datasets for researchers</p>
+                <button class="cta-secondary" style="margin-top: 1rem; width: 100%;">Access Data</button>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎓</div>
+                <h3>Tutorials</h3>
+                <p>Learn how to use I-SRAVIA and contribute to the project</p>
+                <button class="cta-secondary" style="margin-top: 1rem; width: 100%;">Start Learning</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section" id="contact">
+        <h2>Contact Us</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
+            <div>
+                <h3 style="color: var(--accent-cyan); margin-bottom: 1rem;">Get in Touch</h3>
+                <p style="color: var(--muted); margin-bottom: 2rem;">Have questions? Want to collaborate? We'd love to hear from you.</p>
+                
+                <div style="margin-bottom: 1rem;">
+                    <strong>Email:</strong> <a href="mailto:hello@isravia.org" style="color: var(--accent-cyan);">hello@isravia.org</a>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>Press Inquiries:</strong> <a href="mailto:press@isravia.org" style="color: var(--accent-cyan);">press@isravia.org</a>
+                </div>
+                <div style="margin-bottom: 2rem;">
+                    <strong>Partnerships:</strong> <a href="mailto:partners@isravia.org" style="color: var(--accent-cyan);">partners@isravia.org</a>
+                </div>
+                
+                <button class="cta-button">Download Press Kit</button>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Send us a Message</h3>
+                <form>
+                    <div class="form-group">
+                        <input type="text" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="form-group">
+                        <select required>
+                            <option value="">Inquiry Type</option>
+                            <option value="general">General Question</option>
+                            <option value="partnership">Partnership</option>
+                            <option value="press">Press Inquiry</option>
+                            <option value="technical">Technical Support</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Your Message" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="cta-button" style="width: 100%;">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>I-SRAVIA</h3>
+                <p style="color: var(--muted); margin-bottom: 1rem;">Breaking the wall of silence through technology and empathy.</p>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="#" style="color: var(--accent-cyan);">Twitter</a>
+                    <a href="#" style="color: var(--accent-cyan);">LinkedIn</a>
+                    <a href="#" style="color: var(--accent-cyan);">GitHub</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="#home">Home</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#impact">Impact</a>
+                <a href="#features">Features</a>
+                <a href="#team">Team</a>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Get Involved</h3>
+                <a href="#get-involved">Pilot Program</a>
+                <a href="#get-involved">Volunteer</a>
+                <a href="#get-involved">Partner</a>
+                <a href="#get-involved">Donate</a>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Stay Updated</h3>
+                <form style="margin-bottom: 1rem;">
+                    <div class="form-group">
+                        <input type="email" placeholder="Your email" required>
+                    </div>
+                    <div class="form-group">
+                        <select>
+                            <option value="">Your Role</option>
+                            <option value="educator">Educator</option>
+                            <option value="researcher">Researcher</option>
+                            <option value="student">Student</option>
+                            <option value="parent">Parent</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="cta-button" style="width: 100%;">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <p style="color: var(--muted); font-size: 0.9rem;">
+                © 2024 I-SRAVIA. All rights reserved. | 
+                <a href="file:///C:/Users/ASUS/privacy%20policy%20i%20sravia.html" style="color: var(--muted);" target="_blank">Privacy Policy</a> | 
+                <a href="#" style="color: var(--muted);">Terms of Service</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Demo Modal -->
+    <div id="demoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDemo()">&times;</span>
+            <h2 style="margin-bottom: 2rem; text-align: center;">Live Demo</h2>
+            <div style="background: var(--card-bg); padding: 2rem; border-radius: 15px; text-align: center;">
+                <div style="background: linear-gradient(45deg, var(--accent-cyan), var(--accent-magenta)); height: 300px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                    <div style="color: white; font-size: 1.2rem;">
+                        📹 Camera Feed<br>
+                        <small style="opacity: 0.8;">Sign language recognition active</small>
+                    </div>
+                </div>
+                <div style="background: var(--bg); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                    <strong>Recognized Text:</strong>
+                    <p id="demoText" style="color: var(--accent-cyan); margin-top: 0.5rem;">"Hello, how are you today?"</p>
+                </div>
+                <button class="cta-button" onclick="startDemo()">Start Recognition</button>
+                <button class="cta-secondary" onclick="closeDemo()" style="margin-left: 1rem;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Particle animation
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Demo modal functions
+        function openDemo() {
+            // Open the YouTube video directly
+            window.open('https://www.youtube.com/watch?v=_9m3KV_l-zY', '_blank');
+        }
+
+        function closeDemo() {
+            document.getElementById('demoModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function startDemo() {
+            const demoTexts = [
+                "Hello, how are you today?",
+                "Thank you for your help",
+                "I would like to learn more",
+                "This technology is amazing",
+                "Can you help me understand?"
+            ];
+            const randomText = demoTexts[Math.floor(Math.random() * demoTexts.length)];
+            document.getElementById('demoText').textContent = `"${randomText}"`;
+        }
+
+        // Impact calculator
+        function updateImpactCalculator() {
+            const usersInput = document.getElementById('users');
+            const resultSpan = document.getElementById('impact-result');
+            
+            if (usersInput && resultSpan) {
+                usersInput.addEventListener('input', function() {
+                    const users = parseInt(this.value) || 0;
+                    const hoursPerDay = users * 8; // Assuming 8 hours of communication per user per day
+                    resultSpan.textContent = hoursPerDay.toLocaleString() + ' hours';
+                });
+            }
+        }
+
+        // Form submissions
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Thank you for your interest! We\'ll get back to you soon.');
+                this.reset();
+            });
+        });
+
+        // Animate numbers counting up
+        function animateNumbers() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            const targets = ['63M', '400M', '0'];
+            
+            statNumbers.forEach((element, index) => {
+                element.classList.add('animate');
+                
+                // For the first two numbers, animate counting up
+                if (index < 2) {
+                    const targetValue = parseInt(targets[index]);
+                    let current = 0;
+                    const increment = targetValue / 60; // 60 frames over 2 seconds
+                    
+                    const counter = setInterval(() => {
+                        current += increment;
+                        if (current >= targetValue) {
+                            element.textContent = targets[index];
+                            clearInterval(counter);
+                        } else {
+                            element.textContent = Math.floor(current) + (index === 0 ? 'M' : 'M');
+                        }
+                    }, 33); // ~30fps
+                } else {
+                    // For zero, just show it directly
+                    setTimeout(() => {
+                        element.textContent = '0';
+                    }, 500);
+                }
+            });
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            updateImpactCalculator();
+            
+            // Enhanced intersection observer for various animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                        
+                        // Add specific animations based on element type
+                        if (entry.target.classList.contains('workflow-step')) {
+                            entry.target.style.animationDelay = '0.2s';
+                        }
+                        if (entry.target.classList.contains('feature-card')) {
+                            entry.target.style.animationDelay = '0.1s';
+                        }
+                        if (entry.target.classList.contains('stat-card')) {
+                            entry.target.classList.add('bounce-in');
+                        }
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            // Special observer for stats to trigger number animation
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateNumbers();
+                        statsObserver.unobserve(entry.target); // Only animate once
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            // Observe the stats section
+            const statsSection = document.querySelector('.stats');
+            if (statsSection) {
+                statsObserver.observe(statsSection);
+            }
+
+            // Observe all sections and cards
+            document.querySelectorAll('.section, .workflow-step, .feature-card, .team-card').forEach(element => {
+                observer.observe(element);
+            });
+
+            // Add staggered animation to feature cards
+            document.querySelectorAll('.feature-card').forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Add typewriter effect to hero subtitle
+            const subtitle = document.querySelector('.hero-subtitle');
+            if (subtitle) {
+                subtitle.classList.add('typewriter');
+            }
+
+            // Add hover animations to buttons
+            document.querySelectorAll('.cta-button, .cta-secondary').forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px) scale(1.05)';
+                });
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('demoModal');
+            if (e.target === modal) {
+                closeDemo();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96c908c265950cfe',t:'MTc1NDc2MTE4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
